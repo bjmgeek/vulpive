@@ -1,0 +1,153 @@
+body {
+	color: black;  /* global text color */
+	background-color: white;  /* global font color */
+	font-family: sans-serif;  /* global font face */
+}
+
+th {  /* table headers */
+	font-weight: bold;
+	text-align: center;
+}
+
+a:link {  /* unvisited links */
+}
+
+a:visited {  /* visited links */
+}
+
+a:active {  /* clicked links */
+}
+
+a:hover {  /* links with the mouse over them */
+}
+
+.bodytable {  /* main layout table */
+	width: 100%;
+	border: 1px solid black;
+}
+
+.bodytable td {  /* cells of main layout table */
+	vertical-align: top;
+	border-collapse: collapse;
+}
+
+.admin_sidebar {  /* sidebar in administrative section */
+	width: 200px;
+	border-right: 1px dashed black;
+	padding-right: 4px;
+}
+
+.sidebar {  /* sidebar in main section */
+	width: 200px;
+	border-right: 1px dashed black;
+}
+
+
+.sidebar td {  /* cells of sidebar */
+	border-bottom: 1px dashed black;
+	padding-bottom: 5px;
+	padding-top: 5px;
+}
+
+.calendar_panel {  /* cell containing the mini-calendar */
+	text-align: center;
+}
+
+.embedded_calendar {  /* calendar when not in sidebar */
+	width: 200px;
+}
+
+.calendar {  /* calendar view and mini-calendar */
+	text-align: left;
+	font-size: small;
+	width: 100%;
+	border: 2px outset gray;
+	border-collapse: collapse;
+}
+
+.calendar th {  /* weekday headings in calendar */
+	text-align: center;
+	border: 0px;
+}
+
+.calendar td {  /* cells in calendar */
+	border: 1px solid black;
+}
+.calendar td td {  /* formatting inside cells in browse.php */
+	border: 0px;
+}
+
+.big_calendar td {  /* specific to the calendar in calendar.php */
+	border: 1px solid black;
+	text-align: center;
+}
+
+.normal_day {  /* a normal day in the calendar */
+	background-color: #000000;
+}
+
+.today {  /* a highlighted day in the calendar */
+	background-color: #664400;
+}
+
+.off {  /* a cell in the calendar that doesn't represent a day */
+	background-color: #333333;
+}
+
+.divider {  /* a line below certain sections */
+	border-bottom: 1px dashed black;
+}
+
+.top_divider {  /* a line above certain sections */
+	border-top: 1px dashed black;
+}
+
+.comicpanel {  /* the cell in which the comic is displayed */
+	text-align: center;
+	width: 910px;
+}
+
+.databox {  /* any box asking for input in the administrative section */
+	border: 1px inset gray;
+}
+
+.nav {  /* navigation buttons like "Back" and "Forward" */
+	font-weight: bold;
+}
+
+.shoutout {  /* the cell containing the shoutout */
+	font-style: italic;
+	text-align: center;
+}
+
+
+.commentary {  /* the cell containing commentary */
+	font-style: italic;
+	text-align: center;
+}
+
+.comic_title {  /* the cell containing the title of a particular comic strip */
+	font-weight: bold;
+	padding-top: 5px;
+}
+
+.links {  /* applies to all of links.php */
+}
+
+.tooltip {  /* applies to any text that has a tooltip */
+	border-bottom:1px dotted #226622;
+}
+
+.powered_by {  /* applies to the "Powered by..." bar at the bottom of the page */
+	text-align: center;
+	font-size: small;
+	border: 1px solid gray;
+}
+
+.noborder {  /* used to erase borders */
+	border: none;
+}
+
+.noborder td {
+	border: none;
+}

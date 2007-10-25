@@ -1,0 +1,37 @@
+Here are the steps to set up Vulpive on your webserver:
+
+0)  You must have MySQL and PHP on your server.  Newer versions ideally, but I doubt the code uses any features that have been added in the past 3 years.
+
+1)  Create a MySQL database called 'vulpive'.  Give at least one user full read/write access to it.
+
+2)  Import vulpive.sql into the database.  You might do this with a client like phpMyAdmin, or by the following command on Linux:
+	mysql -u [user] -p vulpive < vulpive.sql
+
+3)  Upload everything to your webserver, if you haven't yet.
+
+4)  In includes.php, replace:
+	mysql_connect("localhost","root",null);
+	
+    with:
+	mysql_connect("localhost","[your database username]","[your database password]");
+
+5)  Customize your style:
+	- If you need to add any javascript or meta tags, do so it the 'SITE-SPECIFIC HEAD DATA' area of header.php
+	- If you want to add a banner to your comic page, add it in the 'SITE-SPECIFIC HEADER' area of header.php
+	- To add links to other parts of your site, replace the text '[Links and stuff go here]' in links.php
+	- If you want a custom footer, add it in the 'SITE-SPECIFIC FOOTER' area of footer.php
+	- Modify default.css to set the look and feel of your comic page.
+	- You can overwrite images/favicon.ico with a 16x16 png image related to your comic.  (Still give it the name 'favicon.ico', though.)
+	- Make changes in includes.php if you want:
+		* Change the definitions of FIRST, PREVIOUS, NEXT, LAST, MONTH_BACK, MONTH_FORWARD to whatever HTML you want to represent the various navigation links.
+		* Change "THUMB_WIDTH" if you want your thumbnails to be more or less than 150px wide.
+
+6)  Make sure PHP has write access to the 'images' folder.
+
+7)  Bring up index.php or upload.php in your web browser.  (index.php will redirect you to upload.php)
+
+8)  index.php will continue redirecting you to upload.php until there is at least one comic to display.  If you want to stop this behaviour, upload a comic for today's date or earlier, and make sure it is set to be 'visible'.
+
+9)  Go to 'Change settings' in the sidebar to specify further layout settings for your comic strip.
+
+10)  You should be good to go.  If you ever get stuck, be sure to use the tooltips.  If you ever get really stuck, file a bug at http://sourceforge.net/projects/vulpive, or harass the developer at pifactorial@gmail.com.
