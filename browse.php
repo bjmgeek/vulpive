@@ -99,9 +99,9 @@ $day = date("d",$date);
 $back = strtotime("-1 month",$date);
 $forward = strtotime("+1 month",$date);
 $result = mysql_query("SELECT date FROM comic ORDER BY date ASC LIMIT 1");
-$first = strtotime(array_pop(mysql_fetch_array($result)));
+if(mysql_num_rows($result)) $first = strtotime(array_pop(mysql_fetch_array($result)));
 $result = mysql_query("SELECT date FROM comic ORDER BY date DESC LIMIT 1");
-$last = strtotime(array_pop(mysql_fetch_array($result)));
+if(mysql_num_rows($result)) $last = strtotime(array_pop(mysql_fetch_array($result)));
 ?>
 <table border="0" width="100%">
 <tr><th colspan="5"><?=date("F, Y",$date)?></th></tr>
