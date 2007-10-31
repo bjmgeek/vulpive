@@ -83,7 +83,7 @@ a:hover {  /* links with the mouse over them */
 }
 
 .normal_day {  /* a normal day in the calendar */
-	background-color: #000000;
+	background-color: #ffffff;
 }
 
 .today {  /* a highlighted day in the calendar */
