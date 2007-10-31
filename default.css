@@ -87,11 +87,11 @@ a:hover {  /* links with the mouse over them */
 }
 
 .today {  /* a highlighted day in the calendar */
-	background-color: #664400;
+	background-color: #ffff99;
 }
 
 .off {  /* a cell in the calendar that doesn't represent a day */
-	background-color: #333333;
+	background-color: #999999;
 }
 
 .divider {  /* a line below certain sections */
