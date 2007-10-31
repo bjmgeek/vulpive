@@ -179,8 +179,10 @@ function generate_filename($name,$i) {
 			break;
 		case "title":
 			$extention = strrchr(stripslashes($name),".");
-			$tr_array = array(" "=>"-",","=>"",":"=>"",";"=>"","."=>"","!"=>"","?"=>"","("=>"",")"=>"","["=>"","]"=>"","$"=>"","%"=>"","\""=>"","'"=>"","\\"=>"","/"=>"");
-			$filename = strtr(strtolower($_POST["title"]),$tr_array).$suffix.$extention;
+			$tr_array = array(" "=>"-");
+			$filename = strtr(strtolower($_POST["title"]),$tr_array);
+			$filename = preg_replace("/[^a-zA-Z0-9\-]/","",$filename);
+			$filename .= $suffix.$extention;
 			break;
 		case "random":
 			$extention = strrchr($name,".");
