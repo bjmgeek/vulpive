@@ -103,7 +103,7 @@ if(mysql_num_rows($result)) $first = strtotime(array_pop(mysql_fetch_array($resu
 $result = mysql_query("SELECT date FROM comic ORDER BY date DESC LIMIT 1");
 if(mysql_num_rows($result)) $last = strtotime(array_pop(mysql_fetch_array($result)));
 ?>
-<table border="0" width="100%">
+<table class="calendar_frame" width="100%">
 <tr><th colspan="5"><?=date("F, Y",$date)?></th></tr>
 <tr><td colspan="5" width="100%">
 <table class="calendar big_calendar">
@@ -126,7 +126,7 @@ for($x = $start_day; $x < $num_days + $start_day; $x++) {
 	if(mysql_num_rows($result)) {
 		$row = mysql_fetch_array($result);
 		echo "<small>".$row["title"]."</small>\n";
-		echo "<table><tr><td valign=\"top\"><a href=\"preview.php?comic_id=".$row["comic_id"]."\"><img border=\"0\" src=\"".filename_to_thumb($row["path"])."\" /></a></td>\n";
+		echo "<table><tr><td valign=\"top\"><a href=\"index.php?date=$year-$month-$my_day\"><img border=\"0\" src=\"".filename_to_thumb($row["path"])."\" /></a></td>\n";
 ?>
 <td valign="top">
 <a href="edit_comic.php?date=<?=$date?>&amp;comic_id=<?=$row["comic_id"]?>">Edit&nbsp;comic</a><br />

@@ -19,19 +19,30 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 include_once("includes.php");
 if($_GET["logout"]) unset($_SESSION["user_id"]);
+if($_SESSION["user_id"]) { //show all comics if, and only if, logged in
+	$admin_view = true;
+	$condition = "1";
+	$condition2 = "1";
+	$condition3 = "1";
+} else {
+	$admin_view = false;
+	$condition = "is_visible=1 AND CAST(comic.date AS DATETIME)<NOW()";
+	$condition2 = "is_visible=1";
+	$condition3 = "CAST(comic.date AS DATETIME)<NOW()";
+}
 //if there aren't any comics, automatically redirect to upload.php
-$result = mysql_query("SELECT * FROM comic WHERE is_visible=1 AND CAST(comic.date AS DATETIME)<NOW()");
+$result = mysql_query("SELECT * FROM comic WHERE $condition");
 if(!mysql_num_rows($result)) {
 	header("Location: upload.php");
 }
 
-$result = mysql_query("SELECT date FROM comic WHERE is_visible=1 ORDER BY date ASC LIMIT 1");
+$result = mysql_query("SELECT date FROM comic WHERE $condition2 ORDER BY date ASC LIMIT 1");
 $first = array_pop(mysql_fetch_array($result));
-$result = mysql_query("SELECT date FROM comic WHERE is_visible=1 ORDER BY date DESC LIMIT 1");
+$result = mysql_query("SELECT date FROM comic WHERE $condition2 ORDER BY date DESC LIMIT 1");
 $last = array_pop(mysql_fetch_array($result));
 if(isset($_GET["date"])) {
 	//get comic for a date
-	$query = "SELECT * FROM comic WHERE is_visible=1 AND date<='".$_GET["date"]."' AND CAST(comic.date AS DATETIME)<NOW() ORDER BY date DESC LIMIT 1";
+	$query = "SELECT * FROM comic WHERE $condition AND date<='".$_GET["date"]."' ORDER BY date DESC LIMIT 1";
 	$result = mysql_query($query);
 	if(!mysql_num_rows($result)) {
 		//we've gone back too far
@@ -40,7 +51,7 @@ if(isset($_GET["date"])) {
 	}
 } else {
 	//get today's comic
-	$query = "SELECT * FROM comic WHERE is_visible=1 AND CAST(comic.date AS DATETIME)<NOW() ORDER BY date DESC LIMIT 1";
+	$query = "SELECT * FROM comic WHERE $condition ORDER BY date DESC LIMIT 1";
 	$result = mysql_query($query);
 }
 $comic = mysql_fetch_array($result);
@@ -54,13 +65,13 @@ $subtitle = date("M jS, Y",$date);
 include("header.php");
 
 //get next/previous comics
-$result = mysql_query("SELECT date FROM comic WHERE is_visible=1 AND date < '".$comic["date"]."' AND CAST(comic.date AS DATETIME)<NOW() ORDER BY date DESC LIMIT 1");
+$result = mysql_query("SELECT date FROM comic WHERE $condition AND date < '".$comic["date"]."' ORDER BY date DESC LIMIT 1");
 if(mysql_num_rows($result)) {
 	$prev = array_pop(mysql_fetch_array($result));
 } else {
 	$prev = false;
 }
-$result = mysql_query("SELECT date FROM comic WHERE is_visible=1 AND date > '".$comic["date"]."' AND CAST(comic.date AS DATETIME)<NOW() ORDER BY date ASC LIMIT 1");
+$result = mysql_query("SELECT date FROM comic WHERE $condition AND date > '".$comic["date"]."' ORDER BY date ASC LIMIT 1");
 if(mysql_num_rows($result)) {
 	$next = array_pop(mysql_fetch_array($result));
 } else {
@@ -68,6 +79,11 @@ if(mysql_num_rows($result)) {
 }
 ?>
 <table class="bodytable">
+<?php
+if($admin_view) {  //show "Log out" button if we are logged in
+	echo "<tr><td colspan=\"2\" align=\"right\" class=\"divider\"><a href=\"browse.php?date=$date\">Back to Admin</a> | <a href=\"index.php?logout=true\">Log out</a></td></tr>";
+}
+?>
   <tr>
 <?php
 //don't display sidebar if we're in "single_archive" mode, and we're not viewing today's comic (or if we're in "single" mode)
@@ -98,7 +114,7 @@ if($options["show_dropdown"]=="true") {
 	      <select name="date">
 <?php
 	if($options["sort_dropdown"] !== "chapter") {
-		$query = "SELECT *,IF(LENGTH(title)>0,title,DATE_FORMAT(comic.date,'%M %e, %Y')) AS title FROM comic WHERE is_visible=1 AND CAST(comic.date AS DATETIME)<NOW() ORDER BY ".$options["sort_dropdown"]." ASC";
+		$query = "SELECT *,IF(LENGTH(title)>0,title,DATE_FORMAT(comic.date,'%M %e, %Y')) AS title FROM comic WHERE $condition ORDER BY ".$options["sort_dropdown"]." ASC";
 		$result = mysql_query($query);
 		while($row = mysql_fetch_array($result)) {
 			echo "<option value=\"".$row["date"]."\" ".($row["date"]==$comic["date"]?"selected=\"selected\"":"").">".clean_sql_form($row["title"])."</option>\n";
@@ -109,7 +125,7 @@ if($options["show_dropdown"]=="true") {
 		if(mysql_num_rows($result)) $my_chapter = array_pop(mysql_fetch_array($result));
 
 		//get chapters
-		$query = "SELECT date, chapter.title FROM chapter LEFT JOIN comic USING (comic_id) WHERE CAST(comic.date AS DATETIME)<NOW() ORDER BY date ASC";
+		$query = "SELECT date, chapter.title FROM chapter LEFT JOIN comic USING (comic_id) WHERE $condition3 ORDER BY date ASC";
 		$result = mysql_query($query);
 		while($row = mysql_fetch_array($result)) {
 			echo "<option value=\"".$row["date"]."\" ".($row["date"]==$my_chapter?"selected=\"selected\"":"").">".clean_sql_form($row["title"])."</option>\n";

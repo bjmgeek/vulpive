@@ -1,5 +1,12 @@
 <?php
 include_once("includes.php");
+if($_SESSION["user_id"]) { //show all comics if, and only if, logged in
+	$admin_view = true;
+	$condition = "1";
+} else {
+	$admin_view = false;
+	$condition = "is_visible=1 AND CAST(comic.date AS DATETIME)<NOW()";
+}
 if(isset($_GET["date"])) {
 	$date = strtotime(array_to_date($_GET["date"]));
 } else {
@@ -15,25 +22,30 @@ $month = date("m",$date);
 $day = date("d",$date);
 $concat = date("Ym",$date);
 //find most recent comic that is before this one and not in the same month
-$result = mysql_query("SELECT date FROM comic WHERE is_visible=1 AND EXTRACT(YEAR_MONTH FROM date) < $concat AND CAST(comic.date AS DATETIME)<NOW() ORDER BY date DESC LIMIT 1");
+$result = mysql_query("SELECT date FROM comic WHERE $condition AND EXTRACT(YEAR_MONTH FROM date) < $concat ORDER BY date DESC LIMIT 1");
 if(mysql_num_rows($result)) {
 	$back = array_pop(mysql_fetch_array($result));
 } else {
 	$back = false;
 }
 //uh, the same thing in reverse
-$result = mysql_query("SELECT date FROM comic WHERE is_visible=1 AND EXTRACT(YEAR_MONTH FROM date) > $concat AND CAST(comic.date AS DATETIME)<NOW() ORDER BY date ASC LIMIT 1");
+$result = mysql_query("SELECT date FROM comic WHERE $condition AND EXTRACT(YEAR_MONTH FROM date) > $concat ORDER BY date ASC LIMIT 1");
 if(mysql_num_rows($result)) {
 	$forward = array_pop(mysql_fetch_array($result));
 } else {
 	$forward = false;
 }
-$result = mysql_query("SELECT date FROM comic WHERE is_visible=1 AND CAST(comic.date AS DATETIME)<NOW() ORDER BY date ASC LIMIT 1");
+$result = mysql_query("SELECT date FROM comic WHERE $condition ORDER BY date ASC LIMIT 1");
 $first = array_pop(mysql_fetch_array($result));
-$result = mysql_query("SELECT date FROM comic WHERE is_visible=1 AND CAST(comic.date AS DATETIME)<NOW() ORDER BY date DESC LIMIT 1");
+$result = mysql_query("SELECT date FROM comic WHERE $condition ORDER BY date DESC LIMIT 1");
 $last = array_pop(mysql_fetch_array($result));
 ?>
 <table class="bodytable">
+<?php
+if($admin_view) {  //show "Log out" button if we are logged in
+	echo "<tr><td colspan=\"2\" align=\"right\" class=\"divider\"><a href=\"browse.php?date=$date\">Back to Admin</a> | <a href=\"index.php?logout=true\">Log out</a></td></tr>";
+}
+?>
   <tr>
 <?php
 if($options["column_format"] !== "single") {
@@ -41,7 +53,7 @@ if($options["column_format"] !== "single") {
 }
 ?>
     <td valign="top" align="center">
-<table>
+<table class="calendar_frame">
 <?php
 //display links if mode is "single"
 if($options["column_format"] == "single") {
@@ -67,7 +79,7 @@ for($x = $start_day; $x < $num_days + $start_day; $x++) {
 	$my_day = $x - $start_day + 1;
 	echo "<td valign=\"top\" ".("$year-$month-$my_day"==date("Y-m-d")?"class=\"today\"":"class=\"normal_day\"").">";
 	echo "<b>$my_day</b><br />\n";
-	$query = "SELECT * FROM comic WHERE date = '$year-$month-$my_day' AND is_visible=1 AND CAST(comic.date AS DATETIME)<NOW()";
+	$query = "SELECT * FROM comic WHERE date = '$year-$month-$my_day' AND $condition";
 	$result = mysql_query($query);
 	if(mysql_num_rows($result)) {
 		$row = mysql_fetch_array($result);

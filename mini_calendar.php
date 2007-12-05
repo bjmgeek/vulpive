@@ -1,14 +1,14 @@
 <?php
 $concat = date("Ym",$date);
 //find most recent comic that is before this one and not in the same month
-$result = mysql_query("SELECT date FROM comic WHERE is_visible=1 AND EXTRACT(YEAR_MONTH FROM date) < $concat AND CAST(comic.date AS DATETIME)<NOW() ORDER BY date DESC LIMIT 1");
+$result = mysql_query("SELECT date FROM comic WHERE $condition AND EXTRACT(YEAR_MONTH FROM date) < $concat ORDER BY date DESC LIMIT 1");
 if(mysql_num_rows($result)) {
 	$cal_back = array_pop(mysql_fetch_array($result));
 } else {
 	$cal_back = false;
 }
 //uh, the same thing in reverse
-$result = mysql_query("SELECT date FROM comic WHERE is_visible=1 AND EXTRACT(YEAR_MONTH FROM date) > $concat AND CAST(comic.date AS DATETIME)<NOW() ORDER BY date ASC LIMIT 1");
+$result = mysql_query("SELECT date FROM comic WHERE $condition AND EXTRACT(YEAR_MONTH FROM date) > $concat ORDER BY date ASC LIMIT 1");
 if(mysql_num_rows($result)) {
 	$cal_forward = array_pop(mysql_fetch_array($result));
 } else {
@@ -27,7 +27,7 @@ for($x = $start_day; $x < $num_days + $start_day; $x++) {
 	if($x % 7 == 0) echo "</tr><tr>";
 	$my_day = $x - $start_day + 1;
 	echo "<td ".($my_day==$day?"class=\"today\"":"class=\"normal_day\"").">";
-	$query = "SELECT * FROM comic WHERE date = '$year-$month-$my_day' AND CAST(comic.date AS DATETIME)<NOW()";
+	$query = "SELECT * FROM comic WHERE date = '$year-$month-$my_day' AND $condition3";
 	$result = mysql_query($query);
 	if(mysql_num_rows($result)) {
 		$row = mysql_fetch_array($result);
