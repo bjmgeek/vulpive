@@ -1,6 +1,6 @@
 <?php
 //display messages if they haven't been displayed yet
-if(!is_included("header2.php") {
+if(!is_included("header2.php")) {
 	if(count($messages)) {
 		echo "<ul>\n";
 		foreach($messages as $message) {
