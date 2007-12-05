@@ -9,7 +9,13 @@
 </td>
 <td valign="top">
 <?php
-if($messages) {
+if($_REQUEST["message"]) $messages[] = $_REQUEST["message"];
+if(count($_SESSION["messages"])) {
+	$messages = array_merge($_SESSION["messages"],(array)$messages);
+	unset($_SESSION["messages"]);
+}
+if(count($_REQUEST["messages"])) $messages = array_merge($_REQUEST["messages"],(array)$messages);
+if(count($messages)) {
 	echo "<ul>\n";
 	foreach($messages as $message) {
 		echo "<li>$message</li>\n";

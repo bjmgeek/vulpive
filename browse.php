@@ -52,18 +52,6 @@ if($_POST["username"]) {
 		mysql_query("DELETE FROM chapter WHERE comic_id = ".$_POST["delete_id"]);
 		if(mysql_affected_rows()) $messages[] = "Chapter deleted.";
 	}
-} elseif($_SESSION["user_id"] && $_POST["edit"]) {
-	$result = mysql_query("SELECT comic_id FROM comic WHERE date='".array_to_date($_POST["edit_date"],"date")."'");
-	if(mysql_num_rows($result) && array_pop(mysql_fetch_array($result)) != $_POST["edit_id"]) {
-		$messages[] = "A comic already exists for that date; please delete it or try a different date.";
-		$query = "UPDATE comic SET title='".clean_form_sql($_POST["edit_title"])."'".($enable_commentary?", commentary='".clean_form_sql($_POST["commentary"])."'":"")." WHERE comic_id=".$_POST["edit_id"];
-		mysql_query($query);
-		if(mysql_affected_rows()) $messages[] = "Other changes saved.";
-	} else {
-		$query = "UPDATE comic SET title='".clean_form_sql($_POST["edit_title"])."', date='".array_to_date($_POST["edit_date"],"date")."'".($enable_commentary?", commentary='".clean_form_sql($_POST["commentary"])."'":"")." WHERE comic_id=".$_POST["edit_id"];
-		mysql_query($query);
-		if(mysql_affected_rows()) $messages[] = "Changes saved.";
-	}
 } elseif($_SESSION["user_id"] && $_POST["chapter_edit"]) {
 	$query = "UPDATE chapter SET comic_id=".$_POST["chapter_comic_id"].", title='".clean_form_sql($_POST["chapter_title"])."' WHERE chapter_id=".$_POST["chapter_edit_id"];
 	mysql_query($query);

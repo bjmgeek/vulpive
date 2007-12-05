@@ -1,8 +1,26 @@
 <?php
-$subtitle = "Upload Comics";
-include("header.php");
+include_once("includes.php");
 //is commentary enabled?
 if($options["enable_commentary"]=="true") $enable_commentary = true;
+
+if($_POST["edit"]) {
+	$editing = true;
+	$_POST["date"] = $_POST["edit_date"];
+	$_POST["title"] = $_POST["edit_title"];
+}
+if($_SESSION["user_id"] && $editing) { //process edit_comic except changes to images
+	$result = mysql_query("SELECT comic_id FROM comic WHERE date='".array_to_date($_POST["edit_date"],"date")."'");
+	if(mysql_num_rows($result) && array_pop(mysql_fetch_array($result)) != $_POST["edit_id"]) {
+		$_SESSION["messages"][] = "A comic already exists for that date; please delete it or try a different date.";
+		$query = "UPDATE comic SET title='".clean_form_sql($_POST["edit_title"])."'".($enable_commentary?", commentary='".clean_form_sql($_POST["commentary"])."'":"")." WHERE comic_id=".$_POST["edit_id"];
+		mysql_query($query);
+		if(mysql_affected_rows()) $_SESSION["messages"][] = "Other changes saved.";
+	} else {
+		$query = "UPDATE comic SET title='".clean_form_sql($_POST["edit_title"])."', date='".array_to_date($_POST["edit_date"],"date")."'".($enable_commentary?", commentary='".clean_form_sql($_POST["commentary"])."'":"")." WHERE comic_id=".$_POST["edit_id"];
+		mysql_query($query);
+		if(mysql_affected_rows()) $_SESSION["messages"][] = "Changes saved.";
+	}
+}
 
 if($_POST["username"]) {
 	//log in
@@ -12,9 +30,10 @@ if($_POST["username"]) {
 		$_SESSION["user_id"] = $row["user_id"];
 	}
 	if(!$_SESSION["user_id"]) {
-		echo "User not found.";
+		$messages[] = "User not found.";
 	}
-} elseif($_POST["upload"] && $_SESSION["user_id"] && strlen($_FILES['filename_1']['name'])) {  //only allow upload if logged in and a file is specified
+} elseif(($_POST["upload"] || $editing) && $_SESSION["user_id"] && strlen($_FILES['filename_1']['name'])) {  //only allow upload if logged in and a file is specified
+	//note that this will process data from edit_comic.php too, so that makes things more complicated
 	//process upload
 	$scheme = $_POST["naming_scheme"];
 	//save naming scheme
@@ -55,7 +74,9 @@ if($_POST["username"]) {
 		if($overwrite_id) {
 			//delete old comic
 			unlink("images/".$overwrite_filename);
-			mysql_query("DELETE FROM comic WHERE comic_id=$overwrite_id");
+			if(!$editing) mysql_query("DELETE FROM comic WHERE comic_id=$overwrite_id");
+			//and thumbnail
+			if(file_exists("images/".filename_to_thumb($overwrite_filename,false))) unlink("images/".filename_to_thumb($overwrite_filename,false));
 			//delete extra images
 			$result = mysql_query("SELECT * FROM multi_comic WHERE comic_id=$overwrite_id");
 			while($row = mysql_fetch_array($result)) {
@@ -66,13 +87,19 @@ if($_POST["username"]) {
 		for($i=1;$i<=$num_images;$i++) {
 			if(move_uploaded_file($_FILES["filename_$i"]['tmp_name'],"images/".$filenames[$i])) {
 				if($i == 1) {
-					$query = "INSERT INTO comic (date, title, path, is_visible".($enable_commentary?", commentary":"").") VALUES ('".array_to_date($_POST['date'])."', '".clean_form_sql($_POST["title"])."', 'images/".$filenames[1]."', ".($_POST["is_visible"]?"1":"0").($enable_commentary?", '".clean_form_sql($_POST["commentary"])."'":"").")";
-					mysql_query($query);
-					$first_comic = mysql_insert_id();
-					if(strlen(trim($_POST["chapter"]))) {
-						$query = "INSERT INTO chapter (title, comic_id) VALUES ('".clean_form_sql($_POST["chapter"])."',".mysql_insert_id().")";
+					if($editing) {
+						$query = "UPDATE comic SET path='images/".$filenames[1]."' WHERE comic_id = ".$_POST["edit_id"];
 						mysql_query($query);
-						$messages[] = "New chapter created.";
+						$first_comic = $_POST["edit_id"];
+					} else {
+						$query = "INSERT INTO comic (date, title, path, is_visible".($enable_commentary?", commentary":"").") VALUES ('".array_to_date($_POST['date'])."', '".clean_form_sql($_POST["title"])."', 'images/".$filenames[1]."', ".($_POST["is_visible"]?"1":"0").($enable_commentary?", '".clean_form_sql($_POST["commentary"])."'":"").")";
+						mysql_query($query);
+						$first_comic = mysql_insert_id();
+						if(strlen(trim($_POST["chapter"]))) {
+							$query = "INSERT INTO chapter (title, comic_id) VALUES ('".clean_form_sql($_POST["chapter"])."',".mysql_insert_id().")";
+							mysql_query($query);
+							$messages[] = "New chapter created.";
+						}
 					}
 					//create thumbnail if possible
 					$type = substr($_FILES["filename_1"]['type'],strrpos($_FILES["filename_1"]['type'],"/")+1);
@@ -104,7 +131,7 @@ if($_POST["username"]) {
 				$messages[] = "Upload failed".($num_images>1?" (".ordinal($i)." image)":"").".";
 			}
 		}
-		if($overwrite_id) {
+		if($overwrite_id && !$editing) {
 			//If old comic had a chapter, move it to this comic.  (Unless we're creating a chapter; in that case, delete it.)
 			if(!strlen(trim($_POST["chapter"]))) {
 				//move chapter
@@ -114,8 +141,19 @@ if($_POST["username"]) {
 				mysql_query("DELETE FROM chapter WHERE comic_id=$overwrite_id");
 			}
 		}
-		if($success == $num_images) $messages[] = "Comic successfully uploaded!";
+		if($success == $num_images) {
+			if($editing) {
+				$messages[] = "Image".($num_images>1?"s":"")." successfully replaced.";
+			} else {
+				$messages[] = "Comic successfully uploaded!";
+			}
+		}
 	}
+}
+if($editing) {
+	$_SESSION["messages"] = array_merge((array)$_SESSION["messages"],(array)$messages);
+	header("Location: browse.php?date=".$_POST["browse_date"]);
+	exit();
 }
 if(!$_SESSION["user_id"]) {
 	//not logged in
@@ -123,6 +161,8 @@ if(!$_SESSION["user_id"]) {
 	include("footer.php");
 	exit();
 }
+$subtitle = "Upload Comics";
+include("header.php");
 //upload form
 include("header2.php");
 ?>
@@ -181,7 +221,8 @@ function generate_filename($name,$i) {
 			$extention = strrchr(stripslashes($name),".");
 			$tr_array = array(" "=>"-");
 			$filename = strtr(strtolower($_POST["title"]),$tr_array);
-			$filename = preg_replace("/[^a-zA-Z0-9\-]/","",$filename);
+			$filename = preg_replace("/[^a-zA-Z0-9\-_]/","",$filename);
+			if(!$filename) $filename = "!"; //avoid files named just ".jpg"
 			$filename .= $suffix.$extention;
 			break;
 		case "random":

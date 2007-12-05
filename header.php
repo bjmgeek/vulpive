@@ -11,7 +11,7 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 <title><?=$title?></title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 <link rel="alternate" type="application/rss+xml" href="index_rss.php" title="<?=$options["title"]?>" />
-<link rel="shortcut icon" href="images/favicon.ico" type="image/png" />
+<link rel="shortcut icon" href="images/vulpive/favicon.ico" type="image/png" />
 <!--BEGIN SITE-SPECIFIC HEAD DATA-->
 <!--END SITE-SPECIFIC HEAD DATA-->
 </head>

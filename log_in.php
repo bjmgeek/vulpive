@@ -1,3 +1,15 @@
+<?php
+//display messages if they haven't been displayed yet
+if(!is_included("header2.php") {
+	if(count($messages)) {
+		echo "<ul>\n";
+		foreach($messages as $message) {
+			echo "<li>$message</li>\n";
+		}
+		echo "</ul>\n";
+	}
+}
+?>
 <h1>Please log in:</h1>
 <form action="<?=strip_folder($_SERVER["SCRIPT_NAME"])?>" method="post">
 <table class="databox">

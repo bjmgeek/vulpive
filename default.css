@@ -9,6 +9,10 @@ th {  /* table headers */
 	text-align: center;
 }
 
+td {  /* all table cells */
+	vertical-align: top;
+}
+
 a:link {  /* unvisited links */
 }
 
@@ -27,7 +31,6 @@ a:hover {  /* links with the mouse over them */
 }
 
 .bodytable td {  /* cells of main layout table */
-	vertical-align: top;
 	border-collapse: collapse;
 }
 
@@ -55,6 +58,18 @@ a:hover {  /* links with the mouse over them */
 
 .embedded_calendar {  /* calendar when not in sidebar */
 	width: 200px;
+}
+
+.calendar_frame { /* table containing the big calendar */
+	border-collapse: collapse;
+	border: 0px;
+	cell-padding: 0px;
+}
+
+.mini_calendar_nav_box { /* table containing nav buttons for mini-calendar */
+	border-collapse: collapse;
+	border: 0px;
+	cell-padding: 0px;
 }
 
 .calendar {  /* calendar view and mini-calendar */

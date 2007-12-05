@@ -1,7 +1,7 @@
 <?php
 /*
 Vulpive Webcomic Manager
-Copyright (C) 2007  Alexander Rhodes
+Copyright (C) 2007  Alexander Rhodes (pifactorial@gmail.com)
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -51,7 +51,7 @@ if(isset($_GET["date"])) {
 	}
 } else {
 	//get today's comic
-	$query = "SELECT * FROM comic WHERE $condition ORDER BY date DESC LIMIT 1";
+	$query = "SELECT * FROM comic WHERE CAST(comic.date AS DATETIME)<NOW() ORDER BY date DESC LIMIT 1";
 	$result = mysql_query($query);
 }
 $comic = mysql_fetch_array($result);

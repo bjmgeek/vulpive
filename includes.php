@@ -1,17 +1,7 @@
 <?php
 session_start();
-mysql_connect("localhost","root",null);  // <-- change me!
-mysql_select_db("vulpive");  // change me too, if your database isn't called "vulpive"
-define("VERSION", "Vulpive 0.2");
-define("FIRST", "&lt;&lt; First");
-define("PREVIOUS", "&lt;&nbsp;Previous");
-define("NEXT", "Next&nbsp;&gt;");
-define("LAST", "Last &gt;&gt;");
-define("MONTH_BACK", PREVIOUS);
-define("MONTH_FORWARD", NEXT);
-define("THUMB_WIDTH",150);
-define("NO_THUMB","images/no_thumb.png");
-
+include("db_connect.php");
+include("definitions.php");
 include("tooltips.php");
 
 function reload_options() {
@@ -65,7 +55,7 @@ function strip_folder($path) {
 }
 
 function display_date_dropdown($varname, $date_type="datetime", $set_date=NULL, $font_size=NULL, $display_text="N", $min_incr=5, $seconds=FALSE, $return=false){
-/** Parameters :
+/* Parameters :
           $varname gives basename for the date/time variable array that will be filled with data
           $date_type tells us to display Date, time or both. Default is Both.
           $set_date contains a string in MySQL date format "YYYY-MM-DD HH:MM:ss"
@@ -76,27 +66,9 @@ function display_date_dropdown($varname, $date_type="datetime", $set_date=NULL, 
             in php scripts for display in HTML forms. The date information is available to
             PHP in the form of an array - IT'S UP TO YOU TO EXTRACT THE INFORMATION FOR USE
             The array delivers information in this structure :
-
-                Jonathan: OOPS!  I really shouldn't have changed this.  These really should have been the arrays they were originally
-                          set to
-                Richard: So I'm trying to put them back!
-
-                array_name["year"]
-                array_name["month"]
-                array_name["day"]
-                array_name["hour"]
-                array_name["minute"]
-                array_name["second"]
-            you can manipulate these values in any way you want, I don't impose a structure
-            on your use of it.
-                        Dewi
-
-
-**/
+*/
 // Check parameters for format
 $dump= eregi("date",$date_type) || eregi("time",$date_type) || $date_type=="month" || $date_type="datetime";
-// These arrays can be set up in an include file somewhere to allow easy mod of years
-// also include define() for CONSTANTS used here
 $current_year = date("Y");
 for($x=2000;$x<=$current_year+3;$x++) {
 	$years[$x] = $x;
@@ -159,7 +131,6 @@ if(eregi("date",$date_type)) {
 } else {
   $ret .= "</select></span>";
 }
-#if (eregi("date",$date_type) && eregi("date",$date_type) && $display_text <> 'N') print "<br />";
 
 if (eregi("time",$date_type)) {
   $ret .= "<span class=\"dropdowns\">";
@@ -202,7 +173,7 @@ if($return) {
 } else {
         echo $ret;
 }
-} // End of function display_date_dropdown
+}
 
 
 function array_to_date($array,$mode="time",$time="manual") {
@@ -244,12 +215,13 @@ function clean_form_sql($data) {
 function clean_sql_display($data) {
         $data=htmlentities($data);
         $data=nl2br($data);
-        // allow <i>,<u>,<b>,<s> tags through
-        //$strtr_array = array('&lt;i&gt;'=>'<i>','&lt;/i&gt;'=>'</i>','&lt;i&gt;'=>'<u>','&lt;/i&gt;'=>'</u>','&lt;i&gt;'=>'<b>','&lt;/i&gt;'=>'</b>','&lt;i&gt;'=>'<s>','&lt;/i&gt;'=>'</s>');
-	//allow all tags
 	$strtr_array = array('&lt;' => '<', '&gt;' => '>');
         $data=strtr($data,$strtr_array);
         return $data;
 }
 
+function is_included($filename) {
+	$includes = get_included_files();
+	return in_array($filename, $includes);
+}
 ?>

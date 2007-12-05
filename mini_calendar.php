@@ -42,8 +42,8 @@ while($x % 7) {
 	$x++;
 }
 echo "</tr></table>\n";
-echo "<table class=\"noborder\" width=\"100%\"><tr>\n";
-echo "<td width=\"50%\" align=\"left\">".($cal_back?"<a href=\"index.php?date=$cal_back\">".MONTH_BACK."</a>":"")."</td>";
-echo "<td width=\"50%\" align=\"right\">".($cal_forward?"<a href=\"index.php?date=$cal_forward\">".MONTH_FORWARD."</a>":"")."</td>";
+echo "<table class=\"noborder mini_calendar_nav_box\" width=\"100%\"><tr>\n";
+echo "<td width=\"50%\" align=\"left\" class=\"nav\">".($cal_back?"<a href=\"index.php?date=$cal_back\">".MONTH_BACK."</a>":"")."</td>";
+echo "<td width=\"50%\" align=\"right\" class=\"nav\">".($cal_forward?"<a href=\"index.php?date=$cal_forward\">".MONTH_FORWARD."</a>":"")."</td>";
 echo "</tr></table>\n";
 ?>

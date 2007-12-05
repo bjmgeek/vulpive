@@ -7,9 +7,9 @@ Here are the steps to set up Vulpive on your webserver:
 2)  Import vulpive.sql into the database.  You might do this with a client like phpMyAdmin, or by the following command on Linux:
 	mysql -u [user] -p vulpive < vulpive.sql
 
-3)  Upload everything to your webserver, if you haven't yet.
+3)  Upload everything in this package to your webserver, if you haven't yet.
 
-4)  In includes.php, replace:
+4)  In db_connect.php, replace:
 	mysql_connect("localhost","root",null);
 	
     with:
@@ -21,8 +21,8 @@ Here are the steps to set up Vulpive on your webserver:
 	- To add links to other parts of your site, replace the text '[Links and stuff go here]' in links.php
 	- If you want a custom footer, add it in the 'SITE-SPECIFIC FOOTER' area of footer.php
 	- Modify default.css to set the look and feel of your comic page.
-	- You can overwrite images/favicon.ico with a 16x16 png image related to your comic.  (Still give it the name 'favicon.ico', though.)
-	- Make changes in includes.php if you want:
+	- You can overwrite images/vulpive/favicon.ico with a 16x16 png image related to your comic.  (Still give it the name 'favicon.ico', though.)
+	- Make changes in definitions.php if you want:
 		* Change the definitions of FIRST, PREVIOUS, NEXT, LAST, MONTH_BACK, MONTH_FORWARD to whatever HTML you want to represent the various navigation links.
 		* Change "THUMB_WIDTH" if you want your thumbnails to be more or less than 150px wide.
 
@@ -30,7 +30,7 @@ Here are the steps to set up Vulpive on your webserver:
 
 7)  Bring up index.php or upload.php in your web browser.  (index.php will redirect you to upload.php)  The default username and password are both 'root'.
 
-8)  index.php will continue redirecting you to upload.php until there is at least one comic to display.  If you want to stop this behaviour, upload a comic for today's date or earlier, and make sure it is set to be 'visible'.  You should bookmark upload.php, since there is no link to it from the index once the behaviour changes.
+8)  index.php will continue redirecting you to upload.php until there is at least one comic to display.  If you want to stop this behaviour, upload a comic for today's date or earlier, and make sure it is set to be 'visible'.  You should bookmark upload.php since, for the sake of security, there is no link to it from the index once the behaviour changes.
 
 9)  Go to 'Change settings' in the sidebar to specify further layout settings for your comic strip.  Go to 'Change username/password' to change your login from the default.
 
