@@ -3,9 +3,11 @@ include_once("includes.php");
 if($_SESSION["user_id"]) { //show all comics if, and only if, logged in
 	$admin_view = true;
 	$condition = "1";
+	$condition2 = "1";
 } else {
 	$admin_view = false;
 	$condition = "is_visible=1 AND CAST(comic.date AS DATETIME)<NOW()";
+	$condition2 = "CAST(comic.date AS DATETIME)<NOW()";
 }
 if(isset($_GET["date"])) {
 	$date = strtotime(array_to_date($_GET["date"]));
@@ -119,11 +121,11 @@ if($options["sort_dropdown"]=="chapter") {
         <select name="date">
 <?php
 //find current chapter
-$result = mysql_query("SELECT date FROM chapter LEFT JOIN comic USING (comic_id) WHERE date <= '$year-$month-31' AND CAST(comic.date AS DATETIME)<NOW() ORDER BY date DESC LIMIT 1");
+$result = mysql_query("SELECT date FROM chapter LEFT JOIN comic USING (comic_id) WHERE date <= '$year-$month-31' AND $condition2 ORDER BY date DESC LIMIT 1");
 if(mysql_num_rows($result)) $my_chapter = array_pop(mysql_fetch_array($result));
 
 //get chapters
-$query = "SELECT date, chapter.title FROM chapter LEFT JOIN comic USING (comic_id) WHERE CAST(comic.date AS DATETIME)<NOW() ORDER BY date ASC";
+$query = "SELECT date, chapter.title FROM chapter LEFT JOIN comic USING (comic_id) WHERE $condition2 ORDER BY date ASC";
 $result = mysql_query($query);
 while($row = mysql_fetch_array($result)) {
 	echo "<option value=\"".strtotime($row["date"])."\" ".($row["date"]==$my_chapter?"selected=\"selected\"":"").">".clean_sql_form($row["title"])."</option>\n";
