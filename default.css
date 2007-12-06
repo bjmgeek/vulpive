@@ -52,18 +52,18 @@ a:hover {  /* links with the mouse over them */
 	padding-top: 5px;
 }
 
+.navtable { /* table containing main content with nav buttons */
+	border-collapse: collapse;
+	border: 0px;
+	cell-padding: 0px;
+}
+
 .calendar_panel {  /* cell containing the mini-calendar */
 	text-align: center;
 }
 
 .embedded_calendar {  /* calendar when not in sidebar */
 	width: 200px;
-}
-
-.calendar_frame { /* table containing the big calendar */
-	border-collapse: collapse;
-	border: 0px;
-	cell-padding: 0px;
 }
 
 .mini_calendar_nav_box { /* table containing nav buttons for mini-calendar */

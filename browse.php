@@ -91,7 +91,7 @@ if(mysql_num_rows($result)) $first = strtotime(array_pop(mysql_fetch_array($resu
 $result = mysql_query("SELECT date FROM comic ORDER BY date DESC LIMIT 1");
 if(mysql_num_rows($result)) $last = strtotime(array_pop(mysql_fetch_array($result)));
 ?>
-<table class="calendar_frame" width="100%">
+<table class="navtable" width="100%">
 <tr><th colspan="5"><?=date("F, Y",$date)?></th></tr>
 <tr><td colspan="5" width="100%">
 <table class="calendar big_calendar">

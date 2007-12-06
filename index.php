@@ -92,7 +92,7 @@ if(($options["column_format"] !== "single_archive" || !$next) && $options["colum
 }
 ?>
     <td valign="top" align="center">
-      <table>
+      <table class="navtable">
 <?php
 //display links if mode is "single"
 if($options["column_format"] == "single") {

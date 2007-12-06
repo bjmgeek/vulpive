@@ -53,7 +53,7 @@ if($options["column_format"] !== "single") {
 }
 ?>
     <td valign="top" align="center">
-<table class="calendar_frame">
+<table class="navtable">
 <?php
 //display links if mode is "single"
 if($options["column_format"] == "single") {
