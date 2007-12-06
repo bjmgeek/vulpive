@@ -8,9 +8,13 @@ define("PREVIOUS", "&lt;&nbsp;Previous");
 define("NEXT", "Next&nbsp;&gt;");
 define("LAST", "Last &gt;&gt;");
 
-//nav buttons for mini-calendar
+//nav buttons for calendar views
 define("MONTH_BACK", "&lt;&nbsp;Previous");
 define("MONTH_FORWARD", "Next&nbsp;&gt;");
+
+//nav buttons for mini-calendar
+define("MINI_MONTH_BACK", "&lt;&nbsp;Previous");
+define("MINI_MONTH_FORWARD", "Next&nbsp;&gt;");
 
 //thumbnail width in pixels
 define("THUMB_WIDTH",150);
