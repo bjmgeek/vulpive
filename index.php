@@ -165,7 +165,6 @@ if($prev) {
 ?>
 	  </td>
 	  <td width="50%">
-	    &nbsp;
 	  </td>
 	  <td align="right">
 <?php
@@ -218,7 +217,6 @@ if($prev) {
 ?>
 	  </td>
 	  <td width="50%">
-	    &nbsp;
 	  </td>
 	  <td align="right">
 <?php
