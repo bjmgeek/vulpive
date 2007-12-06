@@ -23,7 +23,7 @@ Here are the steps to set up Vulpive on your webserver:
 	- Modify default.css to set the look and feel of your comic page.
 	- You can overwrite images/vulpive/favicon.ico with a 16x16 png image related to your comic.  (Still give it the name 'favicon.ico', though.)
 	- Make changes in definitions.php if you want:
-		* Change the definitions of FIRST, PREVIOUS, NEXT, LAST, MONTH_BACK, MONTH_FORWARD to whatever HTML you want to represent the various navigation links.
+		* Change the definitions of FIRST, PREVIOUS, NEXT, LAST, MONTH_BACK, MONTH_FORWARD, MINI_MONTH_BACK and MINI_MONTH_FORWARD to whatever HTML you want to represent the various navigation links.
 		* Change "THUMB_WIDTH" if you want your thumbnails to be more or less than 150px wide.
 
 6)  Make sure PHP has write access to the 'images' folder.
